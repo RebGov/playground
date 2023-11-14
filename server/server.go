@@ -80,9 +80,9 @@ func Shutdown(cancel context.CancelFunc) {
 	doneHTTP := StopServer(ctx)
 	err := waitUntilIsDoneOrCanceled(ctx, doneHTTP)
 	if err != nil {
-		log.Printf("service stopped by timeout %s\n", err)
+		log.Printf("service has stopped by timeout %s\n", err)
 	}
-	log.Println("bye bye")
+	log.Println("Good bye thank you for reviewing")
 }
 
 // waitUntilIsDoneOrCanceled it waits until all the dones channels are closed or the context is canceled
@@ -96,10 +96,10 @@ func waitUntilIsDoneOrCanceled(ctx context.Context, dones ...chan struct{}) (err
 	}()
 	select {
 	case <-done:
-		log.Println("all done")
+		log.Println("server is done")
 	case <-ctx.Done():
 		err = ErrServiceCanceled
-		log.Println("canceled")
+		log.Println("server is canceled")
 	}
 	return
 }
