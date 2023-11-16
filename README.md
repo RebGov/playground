@@ -36,6 +36,11 @@ Items required:
 Improvements: 
 - Adding interfaces so can create mock testing on APIs
 
+Notes:
+- Branch `main` took 3 hours.
+- Please see branch `simple-service` (changes in branch add 1 hour) for changes
+  - include adding golangci-lint, some unit tests, simplfy service, updated readme and instructions.
+
 
 ---
 Copywrite &copy; 2023 Rebecca [Becci] Govert <becci.govert@gmail.com>
