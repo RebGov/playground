@@ -11,6 +11,8 @@ Hasina Tanweer’s OSI network model has only one layer - Physical..
 
 ## PreRequisits
 Needs Go Installed
+- Clone github.com/RebGov/playground (branch is main)
+- Changes: switch to branch `simple-service`
 
 ---
 ## First Time Set UP
