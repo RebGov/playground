@@ -31,7 +31,6 @@ func StartServer() {
 			panic(err)
 		}
 	}()
-
 }
 
 func StopServer(ctx context.Context) (done chan struct{}) {
@@ -74,7 +73,9 @@ func WaitShutdown() {
 }
 
 func Shutdown(cancel context.CancelFunc) {
-	cancel()
+	if cancel != nil {
+		cancel() // <-- Cancelling the context
+	}
 	ctx, cancelTimeout := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancelTimeout()
 	doneHTTP := StopServer(ctx)
