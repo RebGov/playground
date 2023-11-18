@@ -23,7 +23,7 @@ Run command
 bin/run.sh
 ```
 
-Will start the server and open the browser or can run the following curl after starting the browser:
+Will start the service. Please either run following curl comand or open `http://localhost:5002` in browser.
 
 ``` 
 curl "http://localhost:5002"
