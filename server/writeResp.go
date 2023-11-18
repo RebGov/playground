@@ -19,36 +19,34 @@ type ErrResponse struct {
 }
 
 func createResponse() ([]byte, error) {
-	joke, int, err := getJoke()
-	if err != nil {
-		return errResponse(err.Error(), int)
+	joke, errR := getJoke()
+	if errR != nil {
+		errResp, err := json.Marshal(errR)
+		if err != nil {
+			return nil, err
+		}
+		return errResp, nil
 	}
 	return []byte(joke), nil
 }
 
-func errResponse(errMsg string, code int) ([]byte, error) {
-	errResponse := &ErrResponse{
-		StatusCode: code,
-		Status:     "failure",
-		ErrorMsg:   errMsg,
+func getJoke() (string, *ErrResponse) {
+	nr := clients.GetRandomName()
+	errResponse := &ErrResponse{}
+	if nr.ErrorResponse != nil {
+		log.Printf("failed to obtain name [%s]\n", nr.ErrorResponse)
+		errResponse.ErrorMsg = nr.ErrorResponse.Error()
+		errResponse.Status = "failure"
+		errResponse.StatusCode = nr.StatusCode
+		return "", errResponse
 	}
-	errResp, err := json.Marshal(errResponse)
-	if err != nil {
-		return nil, err
+	jr := clients.GetRandomJoke(nr.NameResponse)
+	if jr.ErrorResponse != nil {
+		log.Printf("failed with error [%s]\n", jr.ErrorResponse.Error())
+		errResponse.ErrorMsg = jr.ErrorResponse.Error()
+		errResponse.Status = "failure"
+		errResponse.StatusCode = jr.StatusCode
+		return "", errResponse
 	}
-	return errResp, nil
-}
-
-func getJoke() (string, int, error) {
-	fName, lName, int, err := clients.GetRandomName()
-	if err != nil {
-		log.Printf("failed to obtain name [%s]\n", err)
-		return "", int, err
-	}
-	joke, int, err := clients.GetRandomJoke(fName, lName)
-	if err != nil {
-		log.Printf("failed with error [%s]\n", err)
-		return "", int, err
-	}
-	return joke, 200, nil
+	return jr.JokeResponse.JokeValue.Joke, nil
 }

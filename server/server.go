@@ -8,13 +8,10 @@ package server
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 	"os/signal"
-	"runtime"
 	"syscall"
 	"time"
 )
@@ -51,13 +48,15 @@ func createServer() {
 		Addr:    ":5002",
 		Handler: mux,
 	}
-	log.Printf("starting service on localhost%s and opening browser", srv.Addr)
-	open(fmt.Sprintf("http://localhost%s/", srv.Addr))
+	log.Printf("Service is starting on `%s`", srv.Addr)
 }
 
 // writeJoke returns the joke or error response if failure
 func writeJoke(w http.ResponseWriter, r *http.Request) {
 	resp, err := createResponse()
+	if err != nil {
+		log.Printf("couldnt write response error [%s]\n", err)
+	}
 	_, err = w.Write(resp)
 	if err != nil {
 		log.Printf("couldnt write response error [%s]\n", err)
@@ -103,22 +102,4 @@ func waitUntilIsDoneOrCanceled(ctx context.Context, dones ...chan struct{}) (err
 		log.Println("server is canceled")
 	}
 	return
-}
-
-// open opens the specified URL in the default browser of the user.
-func open(url string) error { // author: https://github.com/icza/gowut
-	var cmd string
-	var args []string
-
-	switch runtime.GOOS {
-	case "windows":
-		cmd = "cmd"
-		args = []string{"/c", "start"}
-	case "darwin":
-		cmd = "open"
-	default: // "linux", "freebsd", "openbsd", "netbsd"
-		cmd = "xdg-open"
-	}
-	args = append(args, url)
-	return exec.Command(cmd, args...).Start()
 }
