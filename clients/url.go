@@ -30,7 +30,7 @@ func get(url string) *GetResponse {
 		}
 	}
 	defer resp.Body.Close()
-	respData, err := io.ReadAll(io.Reader(resp.Body))
+	respData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return &GetResponse{
 			Response:   respData,
