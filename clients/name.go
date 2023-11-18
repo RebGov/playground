@@ -5,23 +5,42 @@ package clients
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 )
 
 type NameResponse struct {
 	FirstName string `json:"first_name,omitempty"`
 	LastName  string `json:"last_name,omitempty"`
 }
+type GetNameResp struct {
+	NameResponse  *NameResponse
+	StatusCode    int
+	ErrorResponse error
+}
 
 // GetRandomName retrieves a random name from APIa
-func GetRandomName() (string, string, int, error) {
-	resp, int, err := get(nameUrl)
-	var nameResp NameResponse
-	err = json.Unmarshal(resp, &nameResp)
-	if err != nil {
-		log.Printf("retrying: failed to unmarshal random name response [%s] from [%s] due to error [%s]", string(resp), nameUrl, err)
-		// retry on unmarshall due to API not matching response structure as expected
-		return GetRandomName()
+func GetRandomName() *GetNameResp {
+	resp := get(nameUrl)
+	if resp.Error != nil {
+		return &GetNameResp{
+			NameResponse:  nil,
+			StatusCode:    resp.StatusCode,
+			ErrorResponse: resp.Error,
+		}
 	}
-	return nameResp.FirstName, nameResp.LastName, int, nil
+	var nameResp *NameResponse
+	err := json.Unmarshal(resp.Response, &nameResp)
+	if err != nil {
+		return &GetNameResp{
+			NameResponse:  nil,
+			StatusCode:    500,
+			ErrorResponse: fmt.Errorf("failed to unmarshal name %w", err),
+		}
+
+	}
+	return &GetNameResp{
+		NameResponse:  nameResp,
+		StatusCode:    200,
+		ErrorResponse: nil,
+	}
 }

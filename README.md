@@ -12,7 +12,7 @@ Hasina Tanweer’s OSI network model has only one layer - Physical..
 ## PreRequisits
 Needs Go Installed
 - Clone github.com/RebGov/playground (branch is main)
-- Changes: switch to branch `simple-service`
+
 
 ---
 ## First Time Set UP
@@ -38,10 +38,6 @@ Items required:
 Improvements: 
 - Adding interfaces so can create mock testing on APIs
 
-Notes:
-- Branch `main` took 3 hours.
-- Please see branch `simple-service` (changes in branch add 1 hour) for changes
-  - include adding golangci-lint, some unit tests, simplfy service, updated readme and instructions.
 
 
 ---
