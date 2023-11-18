@@ -23,10 +23,15 @@ Run command
 bin/run.sh
 ```
 
-Will start the service. Please either run following curl comand or open `http://localhost:5002` in browser.
+Will start the service. After Service is started, please either run following curl comand
 
 ``` 
 curl "http://localhost:5002"
+```
+or open the following link in a broswer
+
+```
+ http://localhost:5002
 ```
 ---
 ### To be done
